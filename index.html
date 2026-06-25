@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auric Spawners — Official Wiki</title>
+    <meta name="description" content="Auric Spawners — The Ultimate Spawner Mining Experience for Minecraft. Advanced Silk Touch requirements, Trial Spawner support, MiniMessage formatting and more.">
+    <link rel="icon" type="image/png" href="portada.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+           Auric Spawners Wiki — Design System
+           Dual-tone palette: Auric gold (brand) + Spawners lavender
+           ============================================================ */
+
+        :root {
+            /* Surfaces */
+            --bg: #0a0a0c;
+            --bg-elevated: #111116;
+            --surface: #15151c;
+            --surface-2: #1c1c25;
+            --surface-3: #24242f;
+            --border: #2a2a36;
+            --border-strong: #3a3a48;
+
+            /* Text */
+            --text: #ececf1;
+            --text-muted: #a0a0ad;
+            --text-dim: #6c6c79;
+
+            /* Brand — Auric gold (for "Auric") */
+            --gold: #f4cf3d;
+            --gold-bright: #fef580;
+            --gold-deep: #d16a0c;
+            --gold-soft: rgba(244, 207, 61, 0.12);
+            --gold-line: rgba(244, 207, 61, 0.32);
+
+            /* Brand — Spawners lavender (for "Spawners") */
+            --lavender: #b794f4;
+            --lavender-bright: #d6bcfa;
+            --lavender-deep: #805ad5;
+            --lavender-soft: rgba(183, 148, 244, 0.12);
+            --lavender-line: rgba(183, 148, 244, 0.32);
+
+            /* Accents */
+            --modrinth: #1bd96a;
+            --discord: #5865F2;
+            --youtube: #FF0000;
+
+            /* Effects */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.6);
+            --shadow-gold: 0 0 0 1px rgba(244, 207, 61, 0.15), 0 8px 32px rgba(244, 207, 61, 0.06);
+            --shadow-lavender: 0 0 0 1px rgba(183, 148, 244, 0.15), 0 8px 32px rgba(183, 148, 244, 0.06);
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 22px;
+
+            --sidebar-w: 288px;
+            --content-max: 1080px;
+
+            --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(ellipse 800px 600px at 80% -10%, rgba(183, 148, 244, 0.07), transparent 60%),
+                radial-gradient(ellipse 600px 500px at 0% 100%, rgba(244, 207, 61, 0.05), transparent 60%);
+            background-attachment: fixed;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--surface-3);
+            border-radius: 10px;
+            border: 2px solid var(--bg);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+        ::selection { background: rgba(183, 148, 244, 0.3); color: #fff; }
+
+        /* ============================================================
+           Sidebar
+           ============================================================ */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            width: var(--sidebar-w);
+            background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 32px 24px 24px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .logo-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 192px;
+            height: 192px;
+            margin: 0 auto 16px;
+            background: radial-gradient(circle, rgba(183, 148, 244, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .logo-wrap img {
+            width: 144px;
+            height: 144px;
+            filter: drop-shadow(0 4px 16px rgba(183, 148, 244, 0.45));
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .sidebar-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text);
+        }
+
+        .sidebar-title .accent-gold {
+            background: linear-gradient(120deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-deep) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-title .accent-lavender {
+            background: linear-gradient(120deg, var(--lavender-bright) 0%, var(--lavender) 50%, var(--lavender-deep) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-subtitle {
+            margin: 4px 0 0;
+            font-size: 12px;
+            color: var(--text-dim);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding: 4px 10px;
+            background: var(--lavender-soft);
+            border: 1px solid var(--lavender-line);
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--lavender-bright);
+            letter-spacing: 0.02em;
+        }
+
+        .version-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--lavender);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--lavender);
+        }
+
+        .nav-section-label {
+            padding: 24px 24px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-dim);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .nav-list { list-style: none; padding: 0; margin: 0; }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 11px 24px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s var(--ease), background 0.2s var(--ease);
+            border-left: 2px solid transparent;
+        }
+
+        .nav-btn:hover {
+            color: var(--text);
+            background: rgba(183, 148, 244, 0.04);
+        }
+
+        .nav-btn.active {
+            color: var(--lavender-bright);
+            background: linear-gradient(90deg, rgba(183, 148, 244, 0.08), transparent);
+            border-left-color: var(--lavender);
+        }
+
+        .nav-btn .nav-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            opacity: 0.85;
+        }
+
+        .nav-btn.active .nav-icon { opacity: 1; color: var(--lavender); }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px 24px 28px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sidebar-footer-text {
+            font-size: 11px;
+            color: var(--text-dim);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .sidebar-footer-text a {
+            color: #5865F2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .sidebar-footer-text a:hover { text-decoration: underline; color: #7984f5; }
+
+        /* ============================================================
+           Main content
+           ============================================================ */
+        .main {
+            margin-left: var(--sidebar-w);
+            min-height: 100vh;
+            padding: 56px 48px 96px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content {
+            width: 100%;
+            max-width: var(--content-max);
+        }
+
+        /* Top bar — breadcrumb + external links */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding: 12px 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(10px);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        .breadcrumb .crumb-current {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .breadcrumb .sep {
+            color: var(--lavender);
+            opacity: 0.6;
+        }
+
+        .topbar-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .topbar-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s var(--ease);
+        }
+
+        .topbar-link:hover {
+            color: var(--text);
+            background: var(--surface-2);
+        }
+
+        .topbar-link svg { width: 14px; height: 14px; }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: sectionIn 0.45s var(--ease);
+        }
+
+        .section.active { display: block; }
+
+        @keyframes sectionIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Headings */
+        .section-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--lavender);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 0 0 12px;
+        }
+
+        .section-eyebrow::before {
+            content: '';
+            width: 18px;
+            height: 1px;
+            background: var(--lavender);
+        }
+
+        h1.section-title {
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            line-height: 1.1;
+            margin: 0 0 16px;
+            color: var(--text);
+        }
+
+        h1.section-title .accent-gold {
+            background: linear-gradient(120deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-deep) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1.section-title .accent-lavender {
+            background: linear-gradient(120deg, var(--lavender-bright) 0%, var(--lavender) 50%, var(--lavender-deep) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-lead {
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--text-muted);
+            max-width: 640px;
+            margin: 0 0 32px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            color: var(--text);
+            margin: 48px 0 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 .hash {
+            color: var(--lavender);
+            font-weight: 400;
+            opacity: 0.6;
+            font-size: 0.9em;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 28px 0 10px;
+        }
+
+        p { color: var(--text-muted); margin: 0 0 16px; }
+
+        strong { color: var(--text); font-weight: 600; }
+
+        em { color: var(--text-muted); font-style: italic; }
+
+        ul { color: var(--text-muted); padding-left: 4px; margin: 0 0 16px; list-style: none; }
+
+        ul li {
+            position: relative;
+            padding-left: 22px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        ul li::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 11px;
+            width: 6px;
+            height: 6px;
+            background: var(--lavender);
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(183, 148, 244, 0.5);
+        }
+
+        a.text-link {
+            color: var(--lavender);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(183, 148, 244, 0.3);
+            transition: border-color 0.2s var(--ease);
+        }
+
+        a.text-link:hover { border-bottom-color: var(--lavender); }
+
+        /* Inline code */
+        code {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.88em;
+            background: var(--surface-2);
+            color: var(--lavender-bright);
+            padding: 2px 7px;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #0d0d12;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin: 16px 0 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .code-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-block-lang {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .code-block-lang::before {
+            content: '';
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: var(--lavender);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--lavender);
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-dim);
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s var(--ease);
+        }
+
+        .copy-btn:hover {
+            color: var(--lavender);
+            border-color: var(--lavender-line);
+            background: var(--lavender-soft);
+        }
+
+        .copy-btn.copied {
+            color: var(--modrinth);
+            border-color: rgba(27, 217, 106, 0.4);
+            background: rgba(27, 217, 106, 0.08);
+        }
+
+        .copy-btn svg { width: 12px; height: 12px; }
+
+        .code-block pre {
+            margin: 0;
+            padding: 18px 20px;
+            background: transparent;
+            border: none;
+            color: #d8d8e0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+
+        /* Syntax coloring */
+        .code-block pre .k { color: var(--gold); }
+        .code-block pre .s { color: #9ae6b4; }
+        .code-block pre .n { color: #f6ad55; }
+        .code-block pre .c { color: var(--text-dim); font-style: italic; }
+        .code-block pre .t { color: var(--lavender-bright); }
+        .code-block pre .v { color: #cbd5e0; }
+
+        /* ============================================================
+           Hero
+           ============================================================ */
+        .hero {
+            position: relative;
+            padding: 56px 48px;
+            background:
+                radial-gradient(ellipse 600px 300px at 0% 0%, rgba(183, 148, 244, 0.08), transparent 60%),
+                linear-gradient(135deg, var(--surface) 0%, var(--bg-elevated) 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -10%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(183, 148, 244, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: var(--lavender-soft);
+            border: 1px solid var(--lavender-line);
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--lavender-bright);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 24px;
+        }
+
+        .hero-eyebrow .dot {
+            width: 6px; height: 6px;
+            background: var(--lavender);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--lavender);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin: 0 0 16px;
+            color: var(--text);
+        }
+
+        .hero h1 .accent-gold {
+            background: linear-gradient(120deg, var(--gold-bright) 0%, var(--gold) 45%, var(--gold-deep) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h1 .accent-lavender {
+            background: linear-gradient(120deg, var(--lavender-bright) 0%, var(--lavender) 45%, var(--lavender-deep) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 19px;
+            color: var(--text-muted);
+            max-width: 640px;
+            margin: 0 0 16px;
+            line-height: 1.5;
+        }
+
+        .hero-tagline {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 28px;
+        }
+
+        .hero-tagline .tag-gold { color: var(--gold); }
+        .hero-tagline .tag-sep { color: var(--text-dim); margin: 0 6px; }
+        .hero-tagline .tag-lavender { color: var(--lavender); }
+
+        .hero-description {
+            font-size: 15px;
+            color: var(--text-muted);
+            max-width: 640px;
+            margin: 0 0 32px;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 22px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all 0.2s var(--ease);
+            cursor: pointer;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--lavender-bright) 0%, var(--lavender) 50%, var(--lavender-deep) 100%);
+            color: #1a0f2e;
+            box-shadow: 0 4px 14px rgba(183, 148, 244, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(183, 148, 244, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        }
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border-color: var(--border-strong);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            background: var(--surface-3);
+            border-color: var(--lavender-line);
+        }
+
+        .btn-discord {
+            background: linear-gradient(135deg, #7984f5 0%, #5865F2 50%, #3c45a8 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(88, 101, 242, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+        .btn-discord:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(88, 101, 242, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+
+        .btn-youtube {
+            background: linear-gradient(135deg, #ff4d4d 0%, #FF0000 50%, #a30000 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(255, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+        .btn-youtube:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+
+        /* ============================================================
+           Feature grid
+           ============================================================ */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .feature-card {
+            position: relative;
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            transition: all 0.25s var(--ease);
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--lavender), transparent);
+            opacity: 0;
+            transition: opacity 0.3s var(--ease);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--lavender-line);
+            background: var(--surface-2);
+            box-shadow: var(--shadow-lavender);
+        }
+
+        .feature-card:hover::before { opacity: 1; }
+
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: var(--lavender-soft);
+            border: 1px solid var(--lavender-line);
+            border-radius: var(--radius-md);
+            color: var(--lavender);
+            margin-bottom: 14px;
+        }
+
+        .feature-icon svg { width: 22px; height: 22px; }
+
+        .feature-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0 0 8px;
+        }
+
+        .feature-desc {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .feature-desc code { font-size: 0.85em; }
+
+        /* ============================================================
+           Command list
+           ============================================================ */
+        .command-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .command-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            transition: all 0.2s var(--ease);
+        }
+
+        .command-item:hover {
+            border-color: var(--lavender-line);
+            background: var(--surface-2);
+        }
+
+        .command-syntax {
+            flex: 0 0 auto;
+            min-width: 320px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--lavender-bright);
+            background: #0d0d12;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+
+        .command-syntax::-webkit-scrollbar { height: 4px; }
+
+        .command-syntax .cmd { color: var(--lavender); }
+        .command-syntax .arg { color: #f6ad55; }
+        .command-syntax .opt { color: var(--text-dim); }
+
+        .command-desc {
+            flex: 1;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+            padding-top: 2px;
+        }
+
+        .command-desc .perm {
+            display: inline-block;
+            margin-top: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            color: var(--text-dim);
+        }
+
+        .command-desc .perm code {
+            font-size: 11.5px;
+            color: var(--gold-bright);
+        }
+
+        /* ============================================================
+           Permissions / Placeholders cards
+           ============================================================ */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            padding: 18px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            transition: all 0.2s var(--ease);
+        }
+
+        .info-card:hover {
+            border-color: var(--lavender-line);
+            background: var(--surface-2);
+        }
+
+        .info-card-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .info-card-key {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--lavender-bright);
+            background: #0d0d12;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .info-card-desc {
+            color: var(--text-muted);
+            font-size: 13.5px;
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        .info-card-desc code {
+            font-size: 0.85em;
+            color: var(--gold-bright);
+        }
+
+        /* Note / callout boxes */
+        .callout {
+            display: flex;
+            gap: 14px;
+            padding: 16px 18px;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+        }
+
+        .callout-info {
+            background: var(--lavender-soft);
+            border: 1px solid var(--lavender-line);
+            border-left: 3px solid var(--lavender);
+        }
+
+        .callout-warn {
+            background: rgba(244, 207, 61, 0.08);
+            border: 1px solid var(--gold-line);
+            border-left: 3px solid var(--gold);
+        }
+
+        .callout-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .callout-info .callout-icon { color: var(--lavender); }
+        .callout-warn .callout-icon { color: var(--gold); }
+
+        .callout-icon svg { width: 18px; height: 18px; display: block; }
+
+        .callout-body {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.55;
+        }
+
+        .callout-body p { margin: 0; color: var(--text); }
+        .callout-body strong { color: var(--text); }
+
+        .callout-info .callout-body strong { color: var(--lavender-bright); }
+        .callout-warn .callout-body strong { color: var(--gold-bright); }
+
+        /* ============================================================
+           Accordion (details/summary)
+           ============================================================ */
+        .accordion {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin: 14px 0 20px;
+            overflow: hidden;
+            transition: border-color 0.2s var(--ease);
+        }
+
+        .accordion[open] { border-color: var(--lavender-line); }
+
+        .accordion summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+            list-style: none;
+            user-select: none;
+            transition: background 0.2s var(--ease);
+        }
+
+        .accordion summary::-webkit-details-marker { display: none; }
+
+        .accordion summary::after {
+            content: '';
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-right: 2px solid var(--lavender);
+            border-bottom: 2px solid var(--lavender);
+            transform: rotate(-45deg);
+            transition: transform 0.25s var(--ease);
+            margin-left: 12px;
+            flex-shrink: 0;
+        }
+
+        .accordion[open] summary::after { transform: rotate(45deg); }
+
+        .accordion summary:hover { background: var(--surface-2); }
+
+        .accordion-body {
+            padding: 0 20px 20px;
+        }
+
+        .accordion-body .code-block { margin: 0; border-radius: var(--radius-sm); }
+
+        /* Config subsection nav chips */
+        .config-toc {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 32px;
+        }
+
+        .config-toc-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            align-self: center;
+            padding-right: 8px;
+            border-right: 1px solid var(--border);
+        }
+
+        .config-toc a {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 5px 10px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            transition: all 0.2s var(--ease);
+        }
+
+        .config-toc a:hover {
+            color: var(--lavender);
+            border-color: var(--lavender-line);
+            background: var(--lavender-soft);
+        }
+
+        /* Config subsection card */
+        .config-subsection {
+            padding: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            scroll-margin-top: 24px;
+        }
+
+        .config-subsection h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 0;
+            margin-bottom: 14px;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .config-subsection h3 .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            background: var(--lavender-soft);
+            border: 1px solid var(--lavender-line);
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--lavender);
+        }
+
+        .config-subsection h3 .ico {
+            color: var(--lavender);
+            display: inline-flex;
+        }
+
+        .config-subsection h3 .ico svg { width: 18px; height: 18px; }
+
+        .config-subsection p { font-size: 14.5px; }
+
+        /* Mobile nav toggle */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 200;
+            width: 44px;
+            height: 44px;
+            background: var(--surface-2);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-md);
+            color: var(--text);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-nav-toggle svg { width: 22px; height: 22px; }
+
+        /* ============================================================
+           Responsive
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .feature-grid, .info-grid { grid-template-columns: 1fr; }
+            .command-syntax { min-width: 0; flex: 1 1 100%; }
+            .command-item { flex-direction: column; }
+        }
+
+        @media (max-width: 860px) {
+            .mobile-nav-toggle { display: inline-flex; }
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s var(--ease);
+                width: 280px;
+                box-shadow: var(--shadow-lg);
+            }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0; padding: 24px 20px 80px; }
+            .topbar { margin-bottom: 28px; }
+            .hero { padding: 36px 24px; }
+            .hero h1 { font-size: 38px; }
+            .hero-subtitle { font-size: 16px; }
+            h1.section-title { font-size: 30px; }
+            .config-subsection { padding: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 30px; }
+            .hero-cta .btn { flex: 1 1 100%; justify-content: center; }
+            .topbar-links { display: none; }
+        }
+
+        /* Backdrop for mobile sidebar */
+        .backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 99;
+        }
+
+        .backdrop.show {
+            display: block;
+            animation: fadeIn 0.2s var(--ease);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mobile nav toggle -->
+    <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="backdrop" id="backdrop"></div>
+
+    <!-- ============================================================
+         Sidebar
+         ============================================================ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-wrap">
+                <img src="portada.png" alt="Auric Spawners">
+            </div>
+            <h1 class="sidebar-title"><span class="accent-gold">Auric</span> <span class="accent-lavender">Spawners</span></h1>
+            <p class="sidebar-subtitle">Official Wiki</p>
+            <span class="version-badge">Spawner Mining</span>
+        </div>
+
+        <div class="nav-section-label">Documentation</div>
+        <ul class="nav-list">
+            <li>
+                <button class="nav-btn active" data-target="overview">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    </span>
+                    Overview
+                </button>
+            </li>
+            <li>
+                <button class="nav-btn" data-target="features">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                    </span>
+                    Features
+                </button>
+            </li>
+            <li>
+                <button class="nav-btn" data-target="commands">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                    </span>
+                    Commands
+                </button>
+            </li>
+            <li>
+                <button class="nav-btn" data-target="permissions">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </span>
+                    Permissions
+                </button>
+            </li>
+            <li>
+                <button class="nav-btn" data-target="configuration">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+                    </span>
+                    Configuration
+                </button>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <p class="sidebar-footer-text">
+                Need help? Join our <a href="https://discord.gg/GJRXZk8jEn" target="_blank" rel="noopener">Discord community</a>.<br>
+                © Auric. All rights reserved.
+            </p>
+        </div>
+    </aside>
+
+    <!-- ============================================================
+         Main
+         ============================================================ -->
+    <main class="main">
+        <div class="content">
+
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="breadcrumb">
+                    <span>Auric Spawners</span>
+                    <svg class="sep" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span class="crumb-current" id="crumbCurrent">Overview</span>
+                </div>
+                <div class="topbar-links">
+                    <a href="https://modrinth.com/plugin/auricspawners" class="topbar-link" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 110-16 8 8 0 010 16z"/></svg>
+                        Modrinth
+                    </a>
+                    <a href="https://discord.gg/GJRXZk8jEn" class="topbar-link" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                        Discord
+                    </a>
+                    <a href="https://youtube.com/@midasyt.?si=HLdUw3wF6SHtV8cE" class="topbar-link" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        YouTube
+                    </a>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 Overview
+                 ============================================================ -->
+            <section class="section active" id="overview">
+                <div class="hero">
+                    <div class="hero-eyebrow">
+                        <span class="dot"></span>
+                        Official Documentation
+                    </div>
+                    <h1><span class="accent-gold">Auric</span> <span class="accent-lavender">Spawners</span></h1>
+                    <p class="hero-subtitle">The Ultimate Spawner Mining Experience for Minecraft servers.</p>
+                    <span class="hero-tagline">
+                        <span class="tag-gold">Silk Touch</span>
+                        <span class="tag-sep">·</span>
+                        <span class="tag-lavender">Trial Spawners</span>
+                        <span class="tag-sep">·</span>
+                        <span class="tag-gold">MiniMessage</span>
+                    </span>
+                    <p class="hero-description">
+                        AuricSpawners allows you to mine spawners using different levels of Silk Touch or specific permissions. It is specially designed to support Trial Chamber spawners and offers deep customization for any server.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="https://modrinth.com/plugin/auricspawners" class="btn btn-primary" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1.6 14.4l-3.6-3.6 1.4-1.4 2.2 2.2 5.2-5.2 1.4 1.4-6.6 6.6z"/></svg>
+                            Download on Modrinth
+                        </a>
+                        <a href="https://discord.gg/GJRXZk8jEn" class="btn btn-discord" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                            Discord Support
+                        </a>
+                        <a href="https://youtube.com/@midasyt.?si=HLdUw3wF6SHtV8cE" class="btn btn-youtube" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            YouTube Channel
+                        </a>
+                    </div>
+                </div>
+
+                <p class="section-eyebrow">At a glance</p>
+                <h2 class="section-title">Everything you need to know</h2>
+                <p class="section-lead">
+                    Whether you're configuring simple Silk Touch requirements or pushing the limits of 1.21 Trial Spawners, this wiki covers every feature, command, permission, and configuration option AuricSpawners has to offer.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l8 8-12 12L2 10l8-8 4 4z"/><path d="M10 6l8 8"/></svg></div>
+                        <p class="feature-title">Advanced Silk Touch</p>
+                        <p class="feature-desc">Require a minimum enchantment level to mine spawners successfully. Perfect for servers with custom enchants.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+                        <p class="feature-title">1.21 Trial Spawner Support</p>
+                        <p class="feature-desc">Automatically detects mob waves and restores them perfectly upon placement.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+                        <p class="feature-title">Dynamic Detection</p>
+                        <p class="feature-desc">Use <code>%mob%</code> to display the entity type on your dropped items automatically.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="12" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="18" r="2.5"/><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg></div>
+                        <p class="feature-title">Modern Formatting</p>
+                        <p class="feature-desc">Full support for MiniMessage and HEX color gradients to give your spawners a unique look.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 Features
+                 ============================================================ -->
+            <section class="section" id="features">
+                <p class="section-eyebrow">Capabilities</p>
+                <h1 class="section-title">Key <span class="accent-lavender">Features</span></h1>
+                <p class="section-lead">
+                    A focused toolkit that gives you full control over how spawners are mined, placed, and displayed on your server.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l8 8-12 12L2 10l8-8 4 4z"/><path d="M10 6l8 8"/></svg></div>
+                        <p class="feature-title">Advanced Silk Touch</p>
+                        <p class="feature-desc">Require a minimum enchantment level to mine spawners successfully.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+                        <p class="feature-title">1.21 Trial Spawner Support</p>
+                        <p class="feature-desc">Automatically detects mob waves and restores them upon placement.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+                        <p class="feature-title">Dynamic Detection</p>
+                        <p class="feature-desc">Use <code>%mob%</code> to display the entity type on your dropped items.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="12" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="18" r="2.5"/><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg></div>
+                        <p class="feature-title">Modern Formatting</p>
+                        <p class="feature-desc">Full support for MiniMessage and HEX color gradients.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 Commands
+                 ============================================================ -->
+            <section class="section" id="commands">
+                <p class="section-eyebrow">Reference</p>
+                <h1 class="section-title">Commands</h1>
+                <p class="section-lead">
+                    The complete list of commands available in AuricSpawners. All admin commands are prefixed with <code>/auricspawners</code>.
+                </p>
+
+                <div class="command-list">
+                    <div class="command-item">
+                        <div class="command-syntax"><span class="cmd">/auricspawners reload</span></div>
+                        <div class="command-desc">
+                            Reloads config and messages.
+                            <span class="perm">Permission: <code>auricspawners.admin</code></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 Permissions
+                 ============================================================ -->
+            <section class="section" id="permissions">
+                <p class="section-eyebrow">Access control</p>
+                <h1 class="section-title">Permissions</h1>
+                <p class="section-lead">
+                    Manage who can mine, place, and administer spawners using the following permission nodes.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-head">
+                            <span class="info-card-key">auricspawners.mine</span>
+                        </div>
+                        <p class="info-card-desc">Required to mine spawners (if <code>require-mine-permission</code> is enabled).</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-head">
+                            <span class="info-card-key">auricspawners.place</span>
+                        </div>
+                        <p class="info-card-desc">Required to place spawners (if <code>require-place-permission</code> is enabled).</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-head">
+                            <span class="info-card-key">auricspawners.admin</span>
+                        </div>
+                        <p class="info-card-desc">Access to the reload command and update alerts.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 Configuration
+                 ============================================================ -->
+            <section class="section" id="configuration">
+                <p class="section-eyebrow">Setup</p>
+                <h1 class="section-title">Configuration <span class="accent-lavender">Guide</span></h1>
+                <p class="section-lead">
+                    The <code>config.yml</code> file allows you to deeply customize how AuricSpawners works on your server. Below is a detailed explanation of each option available.
+                </p>
+
+                <div class="config-toc">
+                    <span class="config-toc-label">Topics</span>
+                    <a href="#cfg-silk">Silk Touch</a>
+                    <a href="#cfg-silk-level">Min Silk Level</a>
+                    <a href="#cfg-mine-perm">Mine Permission</a>
+                    <a href="#cfg-place-perm">Place Permission</a>
+                    <a href="#cfg-trial">Trial Spawners</a>
+                    <a href="#cfg-spawner-item">Spawner Item</a>
+                    <a href="#cfg-trial-item">Trial Item</a>
+                    <a href="#cfg-messages">Messages</a>
+                </div>
+
+                <!-- 1. Silk Touch Requirement -->
+                <div class="config-subsection" id="cfg-silk">
+                    <h3>
+                        <span class="num">1</span>
+                        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l8 8-12 12L2 10l8-8 4 4z"/><path d="M10 6l8 8"/></svg></span>
+                        Silk Touch Requirement
+                    </h3>
+                    <p>Enable or disable the requirement of having the Silk Touch enchantment on your tool to successfully mine and drop a spawner.</p>
+
+                    <details class="accordion">
+                        <summary>View example</summary>
+                        <div class="accordion-body">
+                            <div class="code-block">
+                                <div class="code-block-header">
+                                    <span class="code-block-lang">YAML</span>
+                                    <button class="copy-btn" data-copy-target="code-silk">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre id="code-silk"><span class="k">require-silk-touch</span>: <span class="v">true</span></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 2. Minimum Silk Level -->
+                <div class="config-subsection" id="cfg-silk-level">
+                    <h3>
+                        <span class="num">2</span>
+                        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+                        Minimum Silk Level
+                    </h3>
+                    <p>Set the exact level of Silk Touch required. This is an amazing feature if your server uses Custom Enchants plugins and you want to restrict spawner mining to higher enchantment levels.</p>
+
+                    <details class="accordion">
+                        <summary>View example</summary>
+                        <div class="accordion-body">
+                            <div class="code-block">
+                                <div class="code-block-header">
+                                    <span class="code-block-lang">YAML</span>
+                                    <button class="copy-btn" data-copy-target="code-silk-level">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre id="code-silk-level"><span class="k">minimum-silk-level</span>: <span class="n">1</span></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 3. Mine Permission -->
+                <div class="config-subsection" id="cfg-mine-perm">
+                    <h3>
+                        <span class="num">3</span>
+                        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+                        Mine Permission
+                    </h3>
+                    <p>If set to true, players will absolutely need the <code>auricspawners.mine</code> permission to break spawners. If they don't have it, they will receive an error message.</p>
+
+                    <details class="accordion">
+                        <summary>View example</summary>
+                        <div class="accordion-body">
+                            <div class="code-block">
+                                <div class="code-block-header">
+                                    <span class="code-block-lang">YAML</span>
+                                    <button class="copy-btn" data-copy-target="code-mine-perm">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre id="code-mine-perm"><span class="k">require-mine-permission</span>: <span class="v">false</span></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 4. Place Permission -->
+                <div class="config-subsection" id="cfg-place-perm">
+                    <h3>
+                        <span class="num">4</span>
+                        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+                        Place Permission
+                    </h3>
+                    <p>If set to true, players will need the <code>auricspawners.place</code> permission to place a spawner back on the ground.</p>
+
+                    <details class="accordion">
+                        <summary>View example</summary>
+                        <div class="accordion-body">
+                            <div class="code-block">
+                                <div class="code-block-header">
+                                    <span class="code-block-lang">YAML</span>
+                                    <button class="copy-btn" data-copy-target="code-place-perm">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre id="code-place-perm"><span class="k">require-place-permission</span>: <span class="v">false</span></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 5. Trial Spawners Support -->
+                <div class="config-subsection" id="cfg-trial">
+                    <h3>
+                        <span class="num">5</span>
+                        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
+                        Trial Spawners Support
+                    </h3>
+                    <p>Enable this to allow players to mine the new Minecraft 1.21 Trial Spawners. The plugin uses smart reflection to save the exact mob data and restore the Trial Spawner perfectly when placed.</p>
+
+                    <details class="accordion">
+                        <summary>View example</summary>
+                        <div class="accordion-body">
+                            <div class="code-block">
+                                <div class="code-block-header">
+                                    <span class="code-block-lang">YAML</span>
+                                    <button class="copy-btn" data-copy-target="code-trial">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre id="code-trial"><span class="k">support-trial-spawners</span>: <span class="v">true</span></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 6. Regular Spawner Item -->
+                <div class="config-subsection" id="cfg-spawner-item">
+                    <h3>
+                        <span class="num">6</span>
+                        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+                        Regular Spawner Item
+                    </h3>
+                    <p>Customize the name and lore of the dropped regular spawner. You can use MiniMessage tags for colors and the <code>%mob%</code> placeholder to automatically display the entity type.</p>
+
+                    <details class="accordion">
+                        <summary>View example</summary>
+                        <div class="accordion-body">
+                            <div class="code-block">
+                                <div class="code-block-header">
+                                    <span class="code-block-lang">YAML</span>
+                                    <button class="copy-btn" data-copy-target="code-spawner-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre id="code-spawner-item"><span class="k">spawner-item</span>:
+  <span class="k">name</span>: <span class="s">"&lt;yellow&gt;%mob%&lt;/yellow&gt; &lt;light_purple&gt;Spawner&lt;/light_purple&gt;"</span>
+  <span class="k">lore</span>:
+    - <span class="s">"&lt;gray&gt;%mob%&lt;/gray&gt;"</span></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 7. Trial Spawner Item -->
+                <div class="config-subsection" id="cfg-trial-item">
+                    <h3>
+                        <span class="num">7</span>
+                        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+                        Trial Spawner Item
+                    </h3>
+                    <p>Just like regular spawners, you can customize how the Trial Spawner item looks in the player's inventory when dropped.</p>
+
+                    <details class="accordion">
+                        <summary>View example</summary>
+                        <div class="accordion-body">
+                            <div class="code-block">
+                                <div class="code-block-header">
+                                    <span class="code-block-lang">YAML</span>
+                                    <button class="copy-btn" data-copy-target="code-trial-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre id="code-trial-item"><span class="k">trial-spawner-item</span>:
+  <span class="k">name</span>: <span class="s">"&lt;yellow&gt;%mob%&lt;/yellow&gt; &lt;light_purple&gt;Trial Spawner&lt;/light_purple&gt;"</span>
+  <span class="k">lore</span>:
+    - <span class="s">"&lt;gray&gt;%mob%&lt;/gray&gt;"</span></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- 8. Messages & Prefix -->
+                <div class="config-subsection" id="cfg-messages">
+                    <h3>
+                        <span class="num">8</span>
+                        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
+                        Messages &amp; Prefix
+                    </h3>
+                    <p>Customize every single message sent by the plugin. The prefix supports beautiful RGB Gradients using the MiniMessage format!</p>
+
+                    <details class="accordion">
+                        <summary>View example</summary>
+                        <div class="accordion-body">
+                            <div class="code-block">
+                                <div class="code-block-header">
+                                    <span class="code-block-lang">YAML</span>
+                                    <button class="copy-btn" data-copy-target="code-messages">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre id="code-messages"><span class="k">messages</span>:
+  <span class="k">prefix</span>: <span class="s">"&lt;b&gt;&lt;gradient:#ff6700:#fdc300&gt;Auric Spawners&lt;/gradient&gt;&lt;/b&gt; &lt;dark_gray&gt;»&lt;/dark_gray&gt; "</span>
+  <span class="k">no-silk-touch</span>: <span class="s">"&lt;red&gt;You need Silk Touch to mine this spawner!&lt;/red&gt;"</span>
+  <span class="k">low-silk-level</span>: <span class="s">"&lt;red&gt;You need Silk Touch level &lt;level&gt; to mine this spawner!&lt;/red&gt;"</span>
+  <span class="k">no-mine-permission</span>: <span class="s">"&lt;red&gt;You don't have permission to mine spawners!&lt;/red&gt;"</span>
+  <span class="k">no-place-permission</span>: <span class="s">"&lt;red&gt;You don't have permission to place spawners!&lt;/red&gt;"</span>
+  <span class="k">plugin-reload</span>: <span class="s">"&lt;green&gt;Configuration reloaded successfully!&lt;/green&gt;"</span>
+  <span class="k">no-permission</span>: <span class="s">"&lt;red&gt;You do not have permission to execute this command.&lt;/red&gt;"</span></pre>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // ============================================================
+        // Navigation between sections
+        // ============================================================
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('.section');
+        const crumbCurrent = document.getElementById('crumbCurrent');
+        const sectionLabels = {
+            overview: 'Overview',
+            features: 'Features',
+            commands: 'Commands',
+            permissions: 'Permissions',
+            configuration: 'Configuration'
+        };
+
+        function switchSection(targetId, btn) {
+            sections.forEach(s => s.classList.remove('active'));
+            navButtons.forEach(b => b.classList.remove('active'));
+
+            const target = document.getElementById(targetId);
+            if (target) target.classList.add('active');
+            if (btn) btn.classList.add('active');
+
+            if (crumbCurrent) crumbCurrent.textContent = sectionLabels[targetId] || targetId;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeMobileNav();
+        }
+
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.dataset.target;
+                switchSection(target, btn);
+            });
+        });
+
+        // ============================================================
+        // Mobile nav toggle
+        // ============================================================
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('backdrop');
+        const mobileToggle = document.getElementById('mobileNavToggle');
+
+        function openMobileNav() {
+            sidebar.classList.add('open');
+            backdrop.classList.add('show');
+        }
+
+        function closeMobileNav() {
+            sidebar.classList.remove('open');
+            backdrop.classList.remove('show');
+        }
+
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.contains('open') ? closeMobileNav() : openMobileNav();
+            });
+        }
+
+        if (backdrop) {
+            backdrop.addEventListener('click', closeMobileNav);
+        }
+
+        // ============================================================
+        // Copy to clipboard for code blocks
+        // ============================================================
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const targetId = btn.dataset.copyTarget;
+                const pre = document.getElementById(targetId);
+                if (!pre) return;
+
+                const text = pre.innerText;
+
+                try {
+                    await navigator.clipboard.writeText(text);
+
+                    const originalHTML = btn.innerHTML;
+                    btn.classList.add('copied');
+                    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+
+                    setTimeout(() => {
+                        btn.classList.remove('copied');
+                        btn.innerHTML = originalHTML;
+                    }, 1800);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
+            });
+        });
+
+        // ============================================================
+        // Smooth scroll for config TOC links
+        // ============================================================
+        document.querySelectorAll('.config-toc a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ============================================================
+        // Keyboard shortcut: number keys 1-5 to switch sections
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            const keyMap = {
+                '1': 'overview',
+                '2': 'features',
+                '3': 'commands',
+                '4': 'permissions',
+                '5': 'configuration'
+            };
+            const target = keyMap[e.key];
+            if (target) {
+                const btn = document.querySelector(`.nav-btn[data-target="${target}"]`);
+                if (btn) switchSection(target, btn);
+            }
+        });
+    </script>
+</body>
+</html>
